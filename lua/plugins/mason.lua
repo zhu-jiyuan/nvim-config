@@ -1,5 +1,6 @@
 return {
     {
+        event = "VeryLazy",
         "williamboman/mason.nvim",
         config = function ()
             require("mason").setup({
@@ -14,6 +15,7 @@ return {
         end
     },
     {
+        event = "VeryLazy",
         "williamboman/mason-lspconfig.nvim",
         config = function ()
             require("mason-lspconfig").setup({

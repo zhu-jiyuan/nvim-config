@@ -1,17 +1,15 @@
 
 
 return {
-  "nvim-telescope/telescope.nvim",
-  keys = {
-    -- disable the keymap to grep files
-    {"<leader>/", false},
-    -- change a keymap
-    { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
-    -- add a keymap to browse plugin files
-    {
-      "<leader>fp",
-      function() require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root }) end,
-      desc = "Find Plugin File",
-    },
-  },
+    cmd = "Telescope",
+    "nvim-telescope/telescope.nvim",tag = '0.1.4',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    keys = {
+        { "<leader>ff", ":Telescope find_files<CR>", desc = "find files" },
+		{ "<leader>fg", ":Telescope live_grep<CR>", desc = "grep file" },
+		{ "<leader>fr", ":Telescope resume<CR>", desc = "resume" },
+		{ "<leader>fo", ":Telescope oldfiles<CR>", desc = "oldfiles" },
+		{ "<leader>fb", ":Telescope buffers<CR>", desc = "buffers" },
+		{ "<leader>fh", ":Telescope help_tags<CR>", desc = "help_tags" },
+    }
 }

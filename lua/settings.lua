@@ -60,7 +60,7 @@ vim.o.smartindent = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
--- 搜索不要高亮
+-- 搜索高亮
 
 vim.o.hlsearch = false
 vim.o.incsearch = true
@@ -89,8 +89,8 @@ vim.g.completeopt = "menu,menuone,noselect,noinsert"
 -- 样式
 
 --vim.o.background = "dark"
-vim.o.termguicolors = true
-vim.opt.termguicolors = true
+--vim.o.termguicolors = true
+--vim.opt.termguicolors = true
 
 -- 不可见字符的显示，这里只把空格显示为一个点
 
@@ -102,7 +102,6 @@ vim.o.shortmess = vim.o.shortmess .. "c"
 -- 补全显示10行
 
 vim.o.pumheight = 10
-vim.o.clipboard = "unnamedplus"
 
 -- Leader键
 --
