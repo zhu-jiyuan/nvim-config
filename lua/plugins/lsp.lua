@@ -7,6 +7,7 @@ local server_list = {
         }
     },
     pyright = {},
+    jsonls = {},
 }
 
 local on_attach = function(_, bufnr)
@@ -24,8 +25,8 @@ local on_attach = function(_, bufnr)
         vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
     end
 
-    nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-    nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+    nmap('<leader>rn', "<cmd>Lspsaga rename ++project<CR>", '[R]e[n]ame')
+    nmap('<leader>ca', "<cmd>Lspsaga code_action<CR>", '[C]ode [A]ction')
 
     nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
     nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
@@ -35,7 +36,7 @@ local on_attach = function(_, bufnr)
     nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
     -- See `:help K` for why this keymap
-    nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+    nmap('K',"<cmd>Lspsaga hover_doc<CR>" , 'Hover Documentation')
     nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
     -- Lesser used LSP functionality
@@ -52,6 +53,8 @@ local on_attach = function(_, bufnr)
             async = true,
         })
     end, 'Format current buffer with LSP')
+    -- lsp diagnostics
+    nmap('<leader>da', require('telescope.builtin').diagnostics, 'lsp diagnosticls')
 end
 
 return {
@@ -59,15 +62,19 @@ return {
         event = "VeryLazy",
         'neovim/nvim-lspconfig',
         dependencies = {
-            { "folke/neodev.nvim", opts = {} },
+            { "folke/neodev.nvim",  opts = {} },
+            { "folke/neoconf.nvim", cmd = "Neoconf", config = false, dependencies = { "nvim-lspconfig" } },
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig.nvim",
+            'nvimdev/lspsaga.nvim',
         },
         config = function()
-            local lspconfig = require 'lspconfig'
-            lspconfig['lua_ls'].setup({
-
+            require("neoconf").setup({
+                -- override any of the default settings here
             })
+            require "neodev".setup()
+            require "lspsaga".setup()
+
             require("mason").setup({
                 ui = {
                     icons = {
@@ -83,14 +90,15 @@ return {
                 ensure_installed = vim.tbl_keys(server_list),
             })
             local capabilities = require "cmp_nvim_lsp".default_capabilities()
-            for server, config in pairs(server_list) do
-                require "mason-lspconfig".setup(
-                    vim.tbl_deep_extend("keep",{
-                            capabilities = capabilities,
-                            on_attach = on_attach,
-                            settings = server_list[server],
-                            filetypes = (server_list[server] or {}).filetypes,
-                    }, config)
+
+            for server, server_config in pairs(server_list) do
+                require("lspconfig")[server].setup(
+                    vim.tbl_deep_extend("keep", {
+                        capabilities = capabilities,
+                        on_attach = on_attach,
+                        settings = server_list[server],
+                        filetypes = (server_list[server] or {}).filetypes,
+                    }, server_config)
                 )
             end
         end
