@@ -1,4 +1,3 @@
-
 -- 文件编码格式
 
 vim.g.encoding = "UTF-8"
@@ -22,6 +21,14 @@ vim.wo.relativenumber = true
 -- 剪切板设置
 
 vim.opt.clipboard = "unnamedplus"
+
+-- highlight on yank
+vim.api.nvim_create_autocmd('TextYankPost', {
+    callback = function()
+        vim.highlight.on_yank()
+    end,
+})
+
 -- 高亮所在行
 
 vim.wo.cursorline = true
@@ -62,7 +69,7 @@ vim.o.smartcase = true
 
 -- 搜索高亮
 
-vim.o.hlsearch = false
+vim.o.hlsearch = true
 vim.o.incsearch = true
 
 -- 命令模式行高
